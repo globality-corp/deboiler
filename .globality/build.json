@@ -1,0 +1,43 @@
+{
+  "params": {
+    "build_packages": "''",
+    "core_packages": "locales libicu-dev libgomp1 build-essential wget libffi-dev",
+    "dependency_tool": "pip-tools",
+    "docker": {
+      "docker_tag": "python:3.9-slim"
+    },
+    "entrypoint": {
+      "pre_typehinting_commands": [
+        "pip --quiet install .[typehinting]"
+      ]
+    },
+    "extra_requirements_build": [
+      "types-setuptools",
+      "mypy"
+    ],
+    "flake8": {
+      "ignore": "G004, W503, W504",
+      "per-file-ignores": "notebooks/*:T001"
+    },
+    "name": "deboiler",
+    "pypi": {
+      "enabled": true,
+      "filters": {
+        "branches": {
+          "only": "master"
+        }
+      },
+      "pre_sdist": [
+        "sudo pip install bumpversion",
+        "globality-build bump-version"
+      ],
+      "repository": "pypi"
+    },
+    "sonar_python_versions": "3.9,3.10",
+    "test_command": "pytest",
+    "test_py37": false,
+    "use_globality_black": true
+  },
+  "type": "python-library",
+  "version": "2023.18.0"
+}
