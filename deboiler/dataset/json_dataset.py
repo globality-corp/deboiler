@@ -1,7 +1,6 @@
 import json
 from logging import Logger
 from pathlib import Path
-from typing import Optional, Union
 
 from deboiler.dataset.base import DeboilerDataset
 from deboiler.logger import logger
@@ -18,10 +17,10 @@ class JsonDataset(DeboilerDataset):
 
     def __init__(
         self,
-        file_path: Union[str, Path],
+        file_path: str | Path,
         content_key: str = "content",
-        status_key: Optional[str] = "status",
-        content_type_key: Optional[str] = "content_type",
+        status_key: str | None = "status",
+        content_type_key: str | None = "content_type",
         verbose: bool = True,
     ):
         super().__init__(

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod, abstractproperty
-from typing import Mapping, Optional
+from collections.abc import Mapping
 
 from tqdm import tqdm
 
@@ -19,9 +19,9 @@ class DeboilerDataset(ABC):
 
     def __init__(
         self,
-        content_key: Optional[str] = "content",
-        status_key: Optional[str] = "status",
-        content_type_key: Optional[str] = "content_type",
+        content_key: str | None = "content",
+        status_key: str | None = "status",
+        content_type_key: str | None = "content_type",
         verbose: bool = True,
     ):
         self.cached_pages: Mapping[str, ParsedPage] = dict()

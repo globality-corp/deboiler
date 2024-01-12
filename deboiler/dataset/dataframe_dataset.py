@@ -1,5 +1,4 @@
 from logging import Logger
-from typing import Optional
 
 import pandas as pd
 
@@ -20,8 +19,8 @@ class DataFrameDataset(DeboilerDataset):
         self,
         records: pd.DataFrame,
         content_key: str = "content",
-        status_key: Optional[str] = "status",
-        content_type_key: Optional[str] = "content_type",
+        status_key: str | None = "status",
+        content_type_key: str | None = "content_type",
         verbose: bool = True,
     ):
         super().__init__(

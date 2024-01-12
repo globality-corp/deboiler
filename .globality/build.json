@@ -4,7 +4,7 @@
     "core_packages": "locales libicu-dev libgomp1 build-essential wget libffi-dev",
     "dependency_tool": "pip-tools",
     "docker": {
-      "docker_tag": "python:3.9-slim"
+      "docker_tag": "python:3.10-slim"
     },
     "entrypoint": {
       "pre_typehinting_commands": [
@@ -33,7 +33,7 @@
       ],
       "repository": "pypi"
     },
-    "sonar_python_versions": "3.9,3.10",
+    "sonar_python_versions": "3.10",
     "test_command": "pytest",
     "test_py37": false,
     "use_globality_black": true
