@@ -1,13 +1,9 @@
 import cgi
 import re
 import unicodedata
+from collections.abc import Generator, Mapping
 from logging import debug
-from typing import (
-    Generator,
-    Mapping,
-    Optional,
-    Union,
-)
+from typing import Optional
 
 from lxml.etree import _Comment, _Element, _ElementTree
 from lxml.html import tostring as html_tostring
@@ -129,11 +125,11 @@ class LxmlNode:
     title, text, headings, lists, breadcrumbs, etc.
     """
 
-    def __init__(self, node: Union[_ElementTree, _Element], tree: LxmlTree):
+    def __init__(self, node: _ElementTree | _Element, tree: LxmlTree):
         self.node = node
         self.tree = tree  # page tree
 
-        self._normalized_representation_cache: Optional[str] = None
+        self._normalized_representation_cache: str | None = None
 
     def __iter__(self):
         for child in self.node:
@@ -173,14 +169,7 @@ class LxmlNode:
         self._normalized_representation_cache = None
 
     def _remove_spaces(self, text: str) -> str:
-        return (
-            text
-            .replace("\t", "")
-            .replace("\n", "")
-            .replace(" ", "")
-            .lower()
-            .strip()
-        )
+        return text.replace("\t", "").replace("\n", "").replace(" ", "").lower().strip()
 
     def normalized_representation(self, is_root: bool = True) -> str:
         """
@@ -229,7 +218,7 @@ class LxmlNode:
         return f"<{self.tag}{attribute_string}>{text}{optional_text_space}{internal_elements}</{self.tag}>"
 
     @staticmethod
-    def _normalize_string(text: Optional[str], lower_case: bool = False) -> str:
+    def _normalize_string(text: str | None, lower_case: bool = False) -> str:
         """
         Normalizes an input string by removing extra spaces, tabs, multiple new lines, etc.
         """

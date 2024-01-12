@@ -1,9 +1,9 @@
-from pkg_resources import resource_filename
+from importlib import resources
 
 from pathlib import Path
 
 
 def get_fixture_path(fixture_name: str = "") -> Path:
-    return Path(
-        resource_filename(__name__, fixture_name),
-    )
+    ref = resources.files(__name__) / fixture_name
+    with resources.as_file(ref) as path:
+        return path

@@ -2,7 +2,6 @@ import re
 from dataclasses import dataclass
 from io import StringIO
 from logging import Logger
-from typing import Optional, Union
 
 from lxml.etree import HTMLParser, _Element, parse as parse_html
 
@@ -21,7 +20,7 @@ class RawPage:
     """
 
     url: str
-    content: Union[bytes, str]
+    content: bytes | str
 
     def __repr__(self):
         return f"RawPage(url={self.url}, content={self.content[:20]}...)"
@@ -43,7 +42,7 @@ class ParsedPage:
     logger: Logger
     parser = HTMLParser(remove_comments=True)
 
-    def __init__(self, url: str, content: Union[bytes, str]):
+    def __init__(self, url: str, content: bytes | str):
         self.url = url
         self.content: LxmlTree = self.parse(content)
         self.nodes: set[str] = {
@@ -55,7 +54,7 @@ class ParsedPage:
     def __repr__(self):
         return f"ParsedPage(url={self.url})"
 
-    def parse(self, content: Union[str, bytes]) -> LxmlTree:
+    def parse(self, content: str | bytes) -> LxmlTree:
         """
         Parses the input html string/bytes into an LxmlTree.
         """
@@ -147,5 +146,5 @@ class OutputPage:
     headings: str
     lists: str
     breadcrumbs: str
-    language: Optional[str] = None
-    cleaned_html: Optional[str] = None
+    language: str | None = None
+    cleaned_html: str | None = None

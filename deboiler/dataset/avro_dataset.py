@@ -4,7 +4,6 @@ The AvroDataset class will be removed from the package.
 
 from logging import Logger
 from pathlib import Path
-from typing import Optional
 
 from fastavro import reader
 
@@ -21,8 +20,8 @@ class AvroDataset(DeboilerDataset):
         self,
         file_path: str,
         content_key: str = "content",
-        status_key: Optional[str] = "status",
-        content_type_key: Optional[str] = "content_type",
+        status_key: str | None = "status",
+        content_type_key: str | None = "content_type",
         verbose: bool = True,
     ):
         super().__init__(verbose=verbose)

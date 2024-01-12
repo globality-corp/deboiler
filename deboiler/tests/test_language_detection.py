@@ -32,19 +32,16 @@ examples = [
         template.substitute(language='lang="en"', title="page title", text=TEXT),
         "en",
     ),
-
     # english with locale from meta
     (
         template.substitute(language='lang="en-us"', title="page title", text=TEXT),
         "en-us",
     ),
-
     # english from text
     (
         template.substitute(language="", title="page title", text=TEXT),
         "en",
     ),
-
     # non-english from text
     (
         template.substitute(language="", title="título de la página", text="algún texto"),

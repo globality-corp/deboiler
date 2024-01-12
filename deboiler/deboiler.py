@@ -1,11 +1,11 @@
 from collections import defaultdict
+from collections.abc import Iterable
 from contextlib import contextmanager
 from enum import Enum
 from functools import lru_cache, partial
 from logging import Logger
 from multiprocessing import Pool
 from time import time
-from typing import Iterable, Optional
 
 import langdetect
 import numpy as np
@@ -208,29 +208,23 @@ class Deboiler:
         }
 
         self.logger.debug(
-            (
-                f"Number of shared elements that did not meet the occurrence threshold {self._domain_desc}: "
-                f"{len(boilerplate_elements_counter) - len(self.boilerplate_elements)}"
-            )
+            f"Number of shared elements that did not meet the occurrence threshold {self._domain_desc}: "
+            f"{len(boilerplate_elements_counter) - len(self.boilerplate_elements)}"
         )
         self.logger.debug(
-            (
-                f"Number of similar pairs that were excluded from boilerplate identification {self._domain_desc}: "
-                f"{n_similar_pairs:,}"
-            )
+            f"Number of similar pairs that were excluded from boilerplate identification {self._domain_desc}: "
+            f"{n_similar_pairs:,}"
         )
         self.logger.info(
-            (
-                f"Total number of boilerplate elements found for the domain {self._domain_desc}: "
-                f"{len(self.boilerplate_elements):,}"
-            )
+            f"Total number of boilerplate elements found for the domain {self._domain_desc}: "
+            f"{len(self.boilerplate_elements):,}"
         )
         self.logger.info(
             f"Boilerplate identification took {time() - start_time:,.1f} seconds {self._domain_desc}"
         )
 
     @classmethod
-    def detect_language(cls, page: LxmlTree, cleaned_text: str) -> Optional[str]:
+    def detect_language(cls, page: LxmlTree, cleaned_text: str) -> str | None:
         """
         First, tries to detect language based on page metadata.
         If that is not available, uses the heuristic detection algorithm from langdetect.
@@ -303,7 +297,10 @@ class Deboiler:
         return f"({self.domain})" if self.domain else "for domain"
 
     def transform(
-        self, dataset: DeboilerDataset, chunksize: int = 100, include_cleaned_html: bool = False
+        self,
+        dataset: DeboilerDataset,
+        chunksize: int = 100,
+        include_cleaned_html: bool = False,
     ) -> Iterable[OutputPage]:
         """
         Transforms the input dataset and yields an OutputPage object for each page.
@@ -316,10 +313,8 @@ class Deboiler:
                 assert len(dataset.cached_pages) == len(dataset)
             except AssertionError:
                 raise AssertionError(
-                    (
-                        "In `performance` mode, the same dataset passed to the `fit` method should be "
-                        "passed to the `transform` method"
-                    )
+                    "In `performance` mode, the same dataset passed to the `fit` method should be "
+                    "passed to the `transform` method"
                 )
 
         start_time = time()
@@ -345,8 +340,6 @@ class Deboiler:
         self.logger.info(f"  * Number of pages: {len(page_len_delats):,}")
         self.logger.info(f"  * Time taken: {time() - start_time:,.1f} seconds")
         self.logger.info(
-            (
-                "  * Noise reduction per page (characters): "
-                f"{np.mean(page_len_delats):.1f} mean, {np.median(page_len_delats):.1f} median"
-            )
+            "  * Noise reduction per page (characters): "
+            f"{np.mean(page_len_delats):.1f} mean, {np.median(page_len_delats):.1f} median"
         )

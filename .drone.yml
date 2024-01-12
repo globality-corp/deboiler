@@ -14,25 +14,25 @@ trigger:
 
 steps:
   - name: lint-and-type-check
-    image: python:3.9-slim
+    image: python:3.10-slim
     environment:
       AWS_ACCOUNT_ID:
         from_secret: AWS_ACCOUNT_ID
     commands:
-      - pip install -U pip==21.3.1
+      - pip install -U pip==23.3.2
       - pip install awscli
       - aws codeartifact login --tool pip --repository globality-pypi-local --domain globality --domain-owner $AWS_ACCOUNT_ID --region us-east-1
       - ./entrypoint.sh lint
       - ./entrypoint.sh typehinting
 
 
-  - name: test-py39-latest
-    image: python:3.9-slim
+  - name: test-py310-latest
+    image: python:3.10-slim
     environment:
       AWS_ACCOUNT_ID:
         from_secret: AWS_ACCOUNT_ID
     commands:
-      - pip install -U pip==21.3.1
+      - pip install -U pip==23.3.2
       - pip install awscli
       - aws codeartifact login --tool pip --repository globality-pypi-local --domain globality --domain-owner $AWS_ACCOUNT_ID --region us-east-1
       - ./entrypoint.sh test
@@ -51,7 +51,7 @@ steps:
         -Dsonar.branch.name=${DRONE_BRANCH}
     depends_on:
       - lint-and-type-check
-      - test-py39-latest
+      - test-py310-latest
 
   - name: release-python-library-codeartifact
     image: python:3.10-slim
@@ -65,7 +65,7 @@ steps:
     depends_on:
       - sonar-scanner
     commands:
-      - pip install -U pip==23.2.1
+      - pip install -U pip==23.3.2
       - pip install --quiet awscli twine==4.0.2 packaging==23.1 bumpversion
       - bumpversion minor --allow-dirty --new-version `/bin/date +%Y.%-V`.${DRONE_BUILD_NUMBER}
       - export version=$(cat .bumpversion.cfg | awk '/current_version / {print $3}')
@@ -108,7 +108,7 @@ trigger:
 steps:
   - name: dependency-validation-dummy
     pull: always
-    image: python:3.9-slim
+    image: python:3.10-slim
     commands:
       - echo "Dummy step to trigger dependency-validation"
 
