@@ -56,9 +56,9 @@ This is a list
 """
 LIST_INDICATOR_CHAR = "*"
 
-# No text will be extracted from these blacklisted tags
-BLACKLIST_TAGS = {"script", "style", "noscript", "cyfunction", "button", "form"}
-BLACKLIST_CLASSES = (_Comment,)
+# No text will be extracted from these blocklisted tags
+BLOCKLIST_TAGS = {"script", "style", "noscript", "cyfunction", "button", "form"}
+BLOCKLIST_CLASSES = (_Comment,)
 
 # Added to the html dom to uniquely identify an element
 NODE_IDENTIFIER_KEY = "__node_id"
@@ -279,14 +279,14 @@ class LxmlNode:
         """
         Extracts the text from the input node (and its children).
 
-        It does not extract any text from blacklisted tags (BLACKLIST_TAGS, BLACKLIST_CLASSES).
+        It does not extract any text from blocklisted tags (BLOCKLIST_TAGS, BLOCKLIST_CLASSES).
         It does not add line breaks before INLINE_ELEMENTS to maintain text continuity.
 
         (Inspired by the code from https://stackoverflow.com/a/66835172)
         """
 
         for child in node:
-            if child.tag in BLACKLIST_TAGS or isinstance(child, BLACKLIST_CLASSES):
+            if child.tag in BLOCKLIST_TAGS or isinstance(child, BLOCKLIST_CLASSES):
                 continue
 
             # if the tag is a block type tag then yield new lines before after
